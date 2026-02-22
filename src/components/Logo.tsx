@@ -22,7 +22,6 @@ export function Logo() {
       <Text bold color="magenta">
         ╚═════╝ ╚═╝   ╚═╝          ╚═════╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝
       </Text>
-      <Text dimColor>🧹 clean up old branches with style</Text>
     </Box>
   );
 }
