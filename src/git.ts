@@ -72,6 +72,22 @@ export function getBranches(): Branch[] {
   return branches;
 }
 
+export function gitFetch(): string {
+  try {
+    return execSync('git fetch --prune', { encoding: 'utf8', timeout: 30000 }).trim() || 'Fetched (up to date)';
+  } catch (e: any) {
+    return e.stderr?.trim() || 'Fetch failed';
+  }
+}
+
+export function gitPull(): string {
+  try {
+    return execSync('git pull --ff-only', { encoding: 'utf8', timeout: 30000 }).trim();
+  } catch (e: any) {
+    return e.stderr?.trim() || 'Pull failed';
+  }
+}
+
 export function deleteBranch(branchName: string, force: boolean = false): boolean {
   try {
     const flag = force ? '-D' : '-d';

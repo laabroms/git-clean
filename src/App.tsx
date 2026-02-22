@@ -3,7 +3,7 @@ import { Box, Text, useInput, useApp } from 'ink';
 import { Logo } from './components/Logo.js';
 import { BranchList } from './components/BranchList.js';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal.js';
-import { getBranches, deleteBranch, isGitRepo, type Branch } from './git.js';
+import { getBranches, deleteBranch, gitFetch, gitPull, isGitRepo, type Branch } from './git.js';
 
 type View = 'list' | 'confirm' | 'deleting' | 'complete';
 
@@ -17,6 +17,7 @@ export function App() {
     success: [],
     failed: [],
   });
+  const [statusMessage, setStatusMessage] = useState('');
 
   // Load branches on mount
   useEffect(() => {
@@ -75,6 +76,28 @@ export function App() {
         const staleBranches = branches.filter((b) => b.daysStale > 90 && !b.protected);
         setMarkedForDeletion(new Set(staleBranches.map((b) => b.name)));
       }
+      // Fetch
+      else if (input === 'f') {
+        setStatusMessage('⏳ Fetching...');
+        setTimeout(() => {
+          const result = gitFetch();
+          setStatusMessage(result);
+          // Refresh branches after fetch
+          try { setBranches(getBranches()); } catch {}
+          setTimeout(() => setStatusMessage(''), 3000);
+        }, 0);
+      }
+      // Pull
+      else if (input === 'p') {
+        setStatusMessage('⏳ Pulling...');
+        setTimeout(() => {
+          const result = gitPull();
+          setStatusMessage(result);
+          // Refresh branches after pull
+          try { setBranches(getBranches()); } catch {}
+          setTimeout(() => setStatusMessage(''), 3000);
+        }, 0);
+      }
       // Clear selection
       else if (input === 'c') {
         setMarkedForDeletion(new Set());
@@ -125,10 +148,15 @@ export function App() {
           selectedIndex={selectedIndex}
           markedForDeletion={markedForDeletion}
         />
+        {statusMessage && (
+          <Box marginTop={1}>
+            <Text color="yellow">{statusMessage}</Text>
+          </Box>
+        )}
         <Box marginTop={1} flexDirection="column">
           <Text color="cyan">Quick Actions:</Text>
           <Text color="gray">
-            [m] Mark all merged  [s] Mark stale (90d+)  [c] Clear  [q] Quit
+            [m] Mark merged  [s] Mark stale  [c] Clear  [f] Fetch  [p] Pull  [q] Quit
           </Text>
         </Box>
       </Box>
