@@ -36,11 +36,13 @@ git-clean
 
 - **↑/↓** — Navigate branches
 - **Space** — Mark/unmark branch for deletion
-- **d** — Delete marked branches
+- **d** / **Delete** — Delete marked branches
 - **m** — Mark all merged branches
 - **s** — Mark all stale branches (90+ days)
 - **c** — Clear all marks
-- **q** — Quit
+- **f** — Fetch from remote (`git fetch --prune`)
+- **p** — Pull from remote (`git pull --ff-only`)
+- **q** / **Esc** — Quit
 
 ### Branch Status
 
@@ -59,4 +61,4 @@ After working on a project for a while, you end up with dozens of old feature br
 
 ## License
 
-MIT © Lucas Abroms
+MIT © [Lucas Abroms](https://github.com/laabroms)
