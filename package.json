@@ -4,7 +4,7 @@
   "description": "Interactive CLI for cleaning up Git branches",
   "type": "module",
   "bin": {
-    "git-clean": "./dist/cli.js"
+    "git-clean": "dist/cli.js"
   },
   "files": [
     "dist",
