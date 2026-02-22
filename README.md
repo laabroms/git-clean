@@ -2,6 +2,8 @@
 
 Interactive CLI for cleaning up old Git branches.
 
+![Demo](demo.gif)
+
 ## Features
 
 - **Interactive TUI** — Navigate with arrow keys, mark branches with spacebar
