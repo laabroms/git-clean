@@ -25,7 +25,10 @@ export function BranchList({ branches, selectedIndex, markedForDeletion }: Props
         let statusColor: string = 'gray';
         let statusText = '';
 
-        if (branch.current) {
+        if (branch.current && branch.protected) {
+          statusColor = 'green';
+          statusText = '● CURRENT 🔒';
+        } else if (branch.current) {
           statusColor = 'green';
           statusText = '● CURRENT';
         } else if (branch.protected) {
