@@ -52,9 +52,13 @@ export function BranchList({ branches, selectedIndex, markedForDeletion }: Props
             <Text color={isSelected ? 'cyan' : 'white'}>
               {isSelected ? '▶ ' : '  '}
             </Text>
-            <Text color={isMarked ? 'red' : 'white'}>
-              {isMarked ? '☑ ' : '☐ '}
-            </Text>
+            {branch.protected ? (
+              <Text>   </Text>
+            ) : (
+              <Text color={isMarked ? 'red' : 'white'}>
+                {isMarked ? '☑ ' : '☐ '}
+              </Text>
+            )}
             <Box width={30}>
               <Text bold={isSelected} color={isMarked ? 'red' : 'white'}>
                 {branch.name}
