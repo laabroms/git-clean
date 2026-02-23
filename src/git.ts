@@ -37,17 +37,24 @@ export function getBranches(): Branch[] {
     { encoding: 'utf8' }
   );
 
-  // Get merged branches
-  const mergedOutput = execSync(
-    `git branch --merged ${currentBranch}`,
-    { encoding: 'utf8' }
-  );
-  const mergedBranches = new Set(
-    mergedOutput
-      .split('\n')
-      .map(b => b.replace('*', '').trim())
-      .filter(Boolean)
-  );
+  // Get merged branches — check against current branch AND main/master
+  const mergedBranches = new Set<string>();
+  const checkTargets = [currentBranch];
+  for (const main of ['main', 'master']) {
+    try {
+      execSync(`git rev-parse --verify ${main}`, { stdio: 'ignore' });
+      if (!checkTargets.includes(main)) checkTargets.push(main);
+    } catch {}
+  }
+  for (const target of checkTargets) {
+    try {
+      const mergedOutput = execSync(`git branch --merged ${target}`, { encoding: 'utf8' });
+      for (const line of mergedOutput.split('\n')) {
+        const name = line.replace('*', '').trim();
+        if (name) mergedBranches.add(name);
+      }
+    } catch {}
+  }
 
   const branches: Branch[] = [];
   const now = new Date();
