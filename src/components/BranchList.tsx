@@ -37,10 +37,10 @@ export function BranchList({ branches, selectedIndex, markedForDeletion }: Props
         } else if (branch.merged) {
           statusColor = 'blue';
           statusText = '✓ MERGED';
-        } else if (branch.daysStale > 90) {
+        } else if (branch.daysStale > 30) {
           statusColor = 'red';
           statusText = `⚠ ${branch.daysStale}d stale`;
-        } else if (branch.daysStale > 30) {
+        } else if (branch.daysStale > 14) {
           statusColor = 'yellow';
           statusText = `${branch.daysStale}d stale`;
         } else {

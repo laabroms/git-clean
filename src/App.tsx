@@ -71,9 +71,9 @@ export function App() {
         const mergedBranches = branches.filter((b) => b.merged && !b.protected);
         setMarkedForDeletion(new Set(mergedBranches.map((b) => b.name)));
       }
-      // Auto-mark stale branches (>90 days)
+      // Auto-mark stale branches (>14 days)
       else if (input === 's') {
-        const staleBranches = branches.filter((b) => b.daysStale > 90 && !b.protected);
+        const staleBranches = branches.filter((b) => b.daysStale > 14 && !b.protected);
         setMarkedForDeletion(new Set(staleBranches.map((b) => b.name)));
       }
       // Fetch
@@ -156,7 +156,7 @@ export function App() {
         <Box marginTop={1} flexDirection="column">
           <Text color="cyan">Quick Actions:</Text>
           <Text color="gray">
-            [m] Mark merged  [s] Mark stale  [c] Clear  [f] Fetch  [p] Pull  [q] Quit
+            [m] Mark merged  [s] Mark stale (14d+)  [c] Clear  [f] Fetch  [p] Pull  [q] Quit
           </Text>
         </Box>
       </Box>
