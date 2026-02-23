@@ -6,9 +6,10 @@ interface Props {
   branches: Branch[];
   selectedIndex: number;
   markedForDeletion: Set<string>;
+  staleDays: number;
 }
 
-export function BranchList({ branches, selectedIndex, markedForDeletion }: Props) {
+export function BranchList({ branches, selectedIndex, markedForDeletion, staleDays }: Props) {
   return (
     <Box flexDirection="column" marginTop={1}>
       <Box marginBottom={1}>
@@ -37,10 +38,10 @@ export function BranchList({ branches, selectedIndex, markedForDeletion }: Props
         } else if (branch.merged) {
           statusColor = 'blue';
           statusText = '✓ MERGED';
-        } else if (branch.daysStale > 30) {
+        } else if (branch.daysStale > staleDays * 2) {
           statusColor = 'red';
           statusText = `⚠ ${branch.daysStale}d stale`;
-        } else if (branch.daysStale > 14) {
+        } else if (branch.daysStale > staleDays) {
           statusColor = 'yellow';
           statusText = `${branch.daysStale}d stale`;
         } else {

@@ -7,7 +7,11 @@ import { getBranches, deleteBranch, gitFetch, gitPull, isGitRepo, type Branch } 
 
 type View = 'list' | 'confirm' | 'deleting' | 'complete';
 
-export function App() {
+interface AppProps {
+  staleDays: number;
+}
+
+export function App({ staleDays }: AppProps) {
   const { exit } = useApp();
   const [branches, setBranches] = useState<Branch[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -71,9 +75,9 @@ export function App() {
         const mergedBranches = branches.filter((b) => b.merged && !b.protected);
         setMarkedForDeletion(new Set(mergedBranches.map((b) => b.name)));
       }
-      // Auto-mark stale branches (>14 days)
+      // Auto-mark stale branches
       else if (input === 's') {
-        const staleBranches = branches.filter((b) => b.daysStale > 14 && !b.protected);
+        const staleBranches = branches.filter((b) => b.daysStale > staleDays && !b.protected);
         setMarkedForDeletion(new Set(staleBranches.map((b) => b.name)));
       }
       // Fetch
@@ -147,6 +151,7 @@ export function App() {
           branches={branches}
           selectedIndex={selectedIndex}
           markedForDeletion={markedForDeletion}
+          staleDays={staleDays}
         />
         {statusMessage && (
           <Box marginTop={1}>
@@ -156,7 +161,7 @@ export function App() {
         <Box marginTop={1} flexDirection="column">
           <Text color="cyan">Quick Actions:</Text>
           <Text color="gray">
-            [m] Mark merged  [s] Mark stale (14d+)  [c] Clear  [f] Fetch  [p] Pull  [q] Quit
+            [m] Mark merged  [s] Mark stale (${staleDays}d+)  [c] Clear  [f] Fetch  [p] Pull  [q] Quit
           </Text>
         </Box>
       </Box>
