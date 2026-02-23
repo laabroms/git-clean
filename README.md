@@ -29,11 +29,18 @@
 
 ## Installation
 
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/laabroms/git-clean/main/install.sh | bash
+```
+
+### npm (global)
+
 ```bash
 npm install -g @laabroms/git-clean
 ```
 
-Or run directly with `npx`:
+### npx (no install)
 
 ```bash
 npx @laabroms/git-clean
