@@ -12,6 +12,7 @@
 > 🧹 Interactive CLI for cleaning up old Git branches.
 
 [![npm version](https://img.shields.io/npm/v/@laabroms/git-clean.svg)](https://www.npmjs.com/package/@laabroms/git-clean)
+[![GitHub](https://img.shields.io/github/stars/laabroms/git-clean?style=social)](https://github.com/laabroms/git-clean)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ![Demo](assets/demo.gif)
