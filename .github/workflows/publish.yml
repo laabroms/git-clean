@@ -2,87 +2,38 @@ name: Publish Package
 
 on:
   push:
-    branches:
-      - main
-  release:
-    types: [created]
+    tags:
+      - 'v*'
+
+permissions:
+  id-token: write
+  contents: read
+  packages: write
 
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Check if version exists on npm
-        id: version-check
-        run: |
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          if npm view @laabroms/git-clean@$PACKAGE_VERSION version 2>/dev/null; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-            echo "Version $PACKAGE_VERSION already exists on npm"
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-            echo "Version $PACKAGE_VERSION is new"
-          fi
-
-      - name: Publish to npm
-        if: steps.version-check.outputs.exists == 'false'
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm publish --access public
 
   publish-gpr:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    needs: publish-npm
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+          node-version: '24'
           registry-url: 'https://npm.pkg.github.com'
-          scope: '@laabroms'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Check if version exists on GitHub Packages
-        id: version-check
-        continue-on-error: true
-        run: |
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          if npm view @laabroms/git-clean@$PACKAGE_VERSION version --registry=https://npm.pkg.github.com 2>/dev/null; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-            echo "Version $PACKAGE_VERSION already exists on GitHub Packages"
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-            echo "Version $PACKAGE_VERSION is new"
-          fi
-
-      - name: Publish to GitHub Packages
-        if: steps.version-check.outputs.exists == 'false'
-        run: npm publish
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
