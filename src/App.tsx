@@ -161,7 +161,7 @@ export function App({ staleDays }: AppProps) {
         <Box marginTop={1} flexDirection="column">
           <Text color="cyan">Quick Actions:</Text>
           <Text color="gray">
-            [m] Mark merged  [s] Mark stale (${staleDays}d+)  [c] Clear  [f] Fetch  [p] Pull  [q] Quit
+            {`[m] Mark merged  [s] Mark stale (${staleDays}d+)  [c] Clear  [f] Fetch  [p] Pull  [q] Quit`}
           </Text>
         </Box>
       </Box>
