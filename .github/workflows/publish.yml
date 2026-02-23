@@ -13,6 +13,7 @@ permissions:
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
+    environment: release
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -21,7 +22,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm publish --access public
+      - run: npm publish --access public --provenance
 
   publish-gpr:
     runs-on: ubuntu-latest
