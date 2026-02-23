@@ -14,7 +14,7 @@
 [![npm version](https://img.shields.io/npm/v/@laabroms/git-clean.svg)](https://www.npmjs.com/package/@laabroms/git-clean)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-![Demo](https://raw.githubusercontent.com/laabroms/git-clean/main/demo.gif)
+![Demo](assets/demo.gif)
 
 ## Features
 
