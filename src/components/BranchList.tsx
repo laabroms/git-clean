@@ -10,6 +10,18 @@ interface Props {
 }
 
 export function BranchList({ branches, selectedIndex, markedForDeletion, staleDays }: Props) {
+  const termRows = process.stdout.rows || 24;
+  // Reserve space for: logo (8) + header (2) + footer status (1) + quick actions (3) + status msg (1) + padding
+  const windowSize = Math.max(5, termRows - 16);
+
+  const half = Math.floor(windowSize / 2);
+  let start = Math.max(0, selectedIndex - half);
+  const end = Math.min(branches.length, start + windowSize);
+  if (end - start < windowSize) {
+    start = Math.max(0, end - windowSize);
+  }
+  const visible = branches.slice(start, end);
+
   return (
     <Box flexDirection="column" marginTop={1}>
       <Box marginBottom={1}>
@@ -19,8 +31,13 @@ export function BranchList({ branches, selectedIndex, markedForDeletion, staleDa
         <Text color="gray"> — Use ↑/↓ to navigate, Space to mark, d to delete</Text>
       </Box>
 
-      {branches.map((branch, index) => {
-        const isSelected = index === selectedIndex;
+      {start > 0 && (
+        <Text dimColor>  ↑ {start} more</Text>
+      )}
+
+      {visible.map((branch, i) => {
+        const actualIndex = start + i;
+        const isSelected = actualIndex === selectedIndex;
         const isMarked = markedForDeletion.has(branch.name);
 
         let statusColor: string = 'gray';
@@ -69,6 +86,10 @@ export function BranchList({ branches, selectedIndex, markedForDeletion, staleDa
           </Box>
         );
       })}
+
+      {end < branches.length && (
+        <Text dimColor>  ↓ {branches.length - end} more</Text>
+      )}
 
       <Box marginTop={1}>
         <Text color="gray">
